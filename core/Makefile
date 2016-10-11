@@ -1940,6 +1940,8 @@ define build-recoveryramdisk
   $(hide) ln -sf prop.default $(TARGET_RECOVERY_ROOT_OUT)/default.prop
   $(BOARD_RECOVERY_IMAGE_PREPARE)
   $(hide) $(MKBOOTFS) -d $(TARGET_OUT) $(TARGET_RECOVERY_ROOT_OUT) | $(MINIGZIP) > $(recovery_ramdisk)
+  $(hide) ./vendor/du/tools/changelog
+  $(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/(DU_VERSION)-Changelog.txt
 endef
 endif
 
@@ -2257,6 +2259,8 @@ INSTALLED_FILES_FILE := $(PRODUCT_OUT)/installed-files.txt
 INSTALLED_FILES_JSON := $(INSTALLED_FILES_FILE:.txt=.json)
 $(INSTALLED_FILES_FILE): .KATI_IMPLICIT_OUTPUTS := $(INSTALLED_FILES_JSON)
 $(INSTALLED_FILES_FILE): $(FULL_SYSTEMIMAGE_DEPS) $(FILESLIST)
+	$(hide) ./vendor/aosp/tools/changelog
+	$(hide) mv $(PRODUCT_OUT)/Changelog.txt $(PRODUCT_OUT)/AospExtended-$(EXTENDED_VERSION)-$(shell date -u +%Y%m%d-%H%M)-Changelog.txt
 	@echo Installed file list: $@
 	@mkdir -p $(dir $@)
 	@rm -f $@
